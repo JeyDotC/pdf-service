@@ -1,10 +1,10 @@
 {
-    "name": "jobsity/pdf-service",
+    "name": "jeydotc/pdf-service",
     "description": "Description of project pdf-service.",
     "authors": [
         {
             "name": "Jeysson Guevara",
-            "email": "jeysson.guevara@jobsity.io"
+            "email": "jeydotc@gmail.com"
         }
     ],
     "require": {
