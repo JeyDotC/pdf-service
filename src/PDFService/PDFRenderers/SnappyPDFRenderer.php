@@ -19,6 +19,7 @@ use PDFService\Core\IPDFRenderer;
  */
 class SnappyPDFRenderer implements IPDFRenderer
 {
+
     //put your code here
     public function renderPDF($renderedTemplate) {
         $engine = $this->pickWebkitEngine();
@@ -26,13 +27,17 @@ class SnappyPDFRenderer implements IPDFRenderer
         $data = $snappy->getOutputFromHtml($renderedTemplate);
         return $data;
     }
-    
-    private function isWindows() : bool {
-        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-    }
-    
-    private function pickWebkitEngine() : string {
-        return $this->isWindows() ? '' : WKHTMLToPDF::PATH;
+
+    private function pickWebkitEngine(): string {
+        $binsPath = __DIR__ . '/../../../../../bin';
+        $os = strtoupper(PHP_OS);
+        if ($os === 'DARWIN') {
+            return "$binsPath/wkhtmltopdf-amd64-osx";
+        }
+        if ($os === 'WIN') {
+            return "$binsPath/wkhtmltopdf64.exe";
+        }
+        return "$binsPath/wkhtmltopdf-amd64";
     }
 
 }

@@ -28,9 +28,9 @@ class FileSystemBinStorage implements IBinStorage
     //put your code here
     public function save(RenderRequest $request, $pdfBinData) {
         
-        $fileName = com_create_guid() . '.pdf';
+        $fileName = \sha1(time()) . '.pdf';
         
-        $absolutePathToFileName = implode(DIRECTORY_SEPARATOR, [$this->basePath, $request->getTemplateId(), $fileName]);
+        $absolutePathToFileName = implode(DIRECTORY_SEPARATOR, [$this->basePath, $fileName]);
                 
         
         $fileSystem = new Filesystem();
