@@ -1,0 +1,23 @@
+{
+    "name": "jobsity/pdf-service",
+    "description": "Description of project pdf-service.",
+    "authors": [
+        {
+            "name": "Jeysson Guevara",
+            "email": "jeysson.guevara@jobsity.io"
+        }
+    ],
+    "require": {
+        "symfony/finder": "dev-master",
+        "twig/twig": "2.x-dev",
+        "symfony/filesystem": "dev-master",
+        "h4cc/wkhtmltopdf-amd64": "0.12.4",
+        "knplabs/knp-snappy": "dev-master",
+        "wemersonjanuario/wkhtmltopdf-windows": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "PDFService": "src/PDFService"
+        }
+    }
+}
