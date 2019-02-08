@@ -1,6 +1,8 @@
 {
     "name": "jeydotc/pdf-service",
+    "type": "library",
     "description": "Description of project pdf-service.",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Jeysson Guevara",
