@@ -15,7 +15,8 @@
         "symfony/filesystem": "dev-master",
         "h4cc/wkhtmltopdf-amd64": "0.12.4",
         "knplabs/knp-snappy": "dev-master",
-        "wemersonjanuario/wkhtmltopdf-windows": "dev-master"
+        "wemersonjanuario/wkhtmltopdf-windows": "dev-master",
+        "profburial/wkhtmltopdf-binaries-osx": "dev-master"
     },
     "autoload": {
         "psr-0": {
