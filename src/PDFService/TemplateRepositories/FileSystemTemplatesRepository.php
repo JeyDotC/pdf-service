@@ -38,8 +38,10 @@ class FileSystemTemplatesRepository implements ITemplatesRepository
             throw  new TemplateNotFoundException("Template with ID '$templateId' could not be found");
         }
         
+        $iterator = $finder->getIterator();
+        $iterator->rewind();
         /** @var SplFileInfo $file */
-        $file = $finder->getIterator()->current();
+        $file = $iterator->current();
         
         return new Template($templateId, $file->getContents(), $file->getMTime());
     }
