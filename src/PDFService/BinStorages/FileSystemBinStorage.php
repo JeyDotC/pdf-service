@@ -20,18 +20,22 @@ use Symfony\Component\Filesystem\Filesystem;
 class FileSystemBinStorage implements IBinStorage
 {
     private $basePath;
+    private $namingStrategy;
 
-    public function __construct($basePath) {
+    public function __construct($basePath, callable $namingStrategy = null) {
         $this->basePath = $basePath;
+        $this->namingStrategy = $namingStrategy ?? function(RenderRequest $request, $pdfBinData){
+            return "{$request->getTemplateId()}-" . \md5($pdfBinData) . '-' . \time() . ".pdf";
+        };
     }
     
     //put your code here
     public function save(RenderRequest $request, $pdfBinData) {
+        $namingStrategy = $this->namingStrategy;
         
-        $fileName = \sha1(time()) . '.pdf';
+        $fileName = $namingStrategy($request, $pdfBinData);
         
         $absolutePathToFileName = implode(DIRECTORY_SEPARATOR, [$this->basePath, $fileName]);
-                
         
         $fileSystem = new Filesystem();
         $fileSystem->dumpFile($absolutePathToFileName, $pdfBinData);
