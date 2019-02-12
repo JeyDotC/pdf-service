@@ -28,6 +28,17 @@ class RawTemplateEngine implements ITemplateEngine
         //put your code here
     public function renderTemplate(Template $template, $data) {
         
+        $templateFullPath = $this->ensureTemplateContents($template);        
+        
+        ob_start();
+        $callable = require $templateFullPath;
+        if(is_callable($callable)){
+            $callable($data);
+        }
+        return ob_get_clean();
+    }
+    
+    private function ensureTemplateContents(Template $template) : string{
         $templateFullPath = implode(DIRECTORY_SEPARATOR, [ $this->tempDir, "{$template->getId()}.php" ]);
         $fileSystem = new Filesystem();
         
@@ -40,11 +51,6 @@ class RawTemplateEngine implements ITemplateEngine
            $fileSystem->dumpFile($templateFullPath, $template->getContents()); 
         }
         
-        ob_start();
-        $callable = require $templateFullPath;
-        if(is_callable($callable)){
-            $callable($data);
-        }
-        return ob_get_clean();
+        return $templateFullPath;
     }
 }
