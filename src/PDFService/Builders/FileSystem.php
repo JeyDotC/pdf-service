@@ -25,30 +25,30 @@ class FileSystem implements IPDFRendererServiceBuilder
     private $binStorageDir;
     private $useForTemplatesRepository = false;
     private $templatesStorageDir;
-    private $namingConvention;
+    private $namingStrategy;
 
     public static function create() {
         return new static();
     }
 
-    public function forBinStorage($dir) {
+    public function forBinStorage($dir, callable $namingStrategy = null) {
         $this->useForBinStorage = true;
         $this->binStorageDir = $dir;
+        $this->namingStrategy = $namingStrategy;
         return $this;
     }
 
-    public function forTemplatesStorage($dir, callable $namingConvention = null) {
+    public function forTemplatesStorage($dir) {
         $this->useForTemplatesRepository = true;
         $this->templatesStorageDir = $dir;
-        $this->namingConvention = $namingConvention;
         return $this;
     }
 
     //put your code here
     public function build(PDFRenderService $service): PDFRenderService {
         if ($this->useForBinStorage) {
-            $fileSystemStorage = $this->namingConvention ? 
-                    new FileSystemBinStorage($this->binStorageDir, $this->namingConvention) : 
+            $fileSystemStorage = $this->namingStrategy ? 
+                    new FileSystemBinStorage($this->binStorageDir, $this->namingStrategy) : 
                     new FileSystemBinStorage($this->binStorageDir);
             
             $service->setBinStorage($fileSystemStorage);
