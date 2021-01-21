@@ -20,8 +20,8 @@ class RawTemplateEngine implements ITemplateEngine
 {
     private $tempDir;
     
-    public function __construct($tempDir) {
-        $this->tempDir = $tempDir;
+    public function __construct($tempDir = null) {
+        $this->tempDir = $tempDir ?? sys_get_temp_dir();
     }
 
     public function renderTemplate(Template $template, $data) {

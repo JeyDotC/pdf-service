@@ -58,33 +58,13 @@ The magic comes with the fact that, you can just configure all of these aspects 
 
 ## How to install
 
-> TODO: Put instructions here after publishing to packagist. For now:
-
-1. Add a repository entry in your composer pointing to this repository.
-2. Set composer's minimum stability to `dev`
-3. Require `jeydotc/pdf-service`.
-
-Minimum composer requiring this library:
-
-```json
-{
-    "name": "my-project",
-    "description": "Description of project.",
-    "authors": [],
-    "minimum-stability": "dev",
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/JeyDotC/pdf-service.git"
-        }
-    ],
-    "require": {
-        "jeydotc/pdf-service": "*"
-    }
-}
+```shell
+composer require jeydotc/pdf-service
 ```
 
-After publishing first version in packagist, only step 3 will be required.
+### About the `wkhtmltopdf` binary required by `SnappyPDFRenderer`
+
+Pdf service will try to download an appropriate runtime binary depending on the platform as a post-install step. If you face any problems, you can always download your own binary and provide the full path at the `SnappyPDFRenderer` constructor.
 
 ## How to use
 
