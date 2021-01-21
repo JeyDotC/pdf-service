@@ -11,8 +11,6 @@ namespace PDFService\TemplateRepositories;
 use PDFService\Core\Exceptions\TemplateNotFoundException;
 use PDFService\Core\ITemplatesRepository;
 use PDFService\Core\Template;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Description of FileSystemTemplatesRepository
@@ -29,21 +27,15 @@ class FileSystemTemplatesRepository implements ITemplatesRepository
 
     //put your code here
     public function loadTemplate($templateId) : Template {
-        $finder = Finder::create()
-                ->files()
-                ->in($this->basePath)
-                ->name($templateId);
+        $fullPath = implode(DIRECTORY_SEPARATOR, [$this->basePath, $templateId]);
                 
-        if(!$finder->hasResults()){
+        if(!is_file($fullPath)){
             throw  new TemplateNotFoundException("Template with ID '$templateId' could not be found");
         }
+
+        $file = new \SplFileInfo($fullPath);
         
-        $iterator = $finder->getIterator();
-        $iterator->rewind();
-        /** @var SplFileInfo $file */
-        $file = $iterator->current();
-        
-        return new Template($templateId, $file->getContents(), $file->getMTime());
+        return new Template($templateId, file_get_contents($fullPath), $file->getMTime());
     }
 
 }

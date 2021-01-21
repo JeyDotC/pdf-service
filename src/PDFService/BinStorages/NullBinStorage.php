@@ -19,7 +19,6 @@ use PDFService\Core\RenderRequest;
 class NullBinStorage implements IBinStorage
 {
 
-    //put your code here
     public function save(RenderRequest $request, $pdfBinData) {
         return $pdfBinData;
     }

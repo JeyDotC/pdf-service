@@ -10,7 +10,6 @@ namespace PDFService\BinStorages;
 
 use PDFService\Core\IBinStorage;
 use PDFService\Core\RenderRequest;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Description of FileSystemBinStorage
@@ -37,8 +36,7 @@ class FileSystemBinStorage implements IBinStorage
         
         $absolutePathToFileName = implode(DIRECTORY_SEPARATOR, [$this->basePath, $fileName]);
         
-        $fileSystem = new Filesystem();
-        $fileSystem->dumpFile($absolutePathToFileName, $pdfBinData);
+        file_put_contents($absolutePathToFileName, $pdfBinData);
         
         return $fileName;
     }

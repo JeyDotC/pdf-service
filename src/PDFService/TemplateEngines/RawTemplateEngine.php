@@ -10,7 +10,6 @@ namespace PDFService\TemplateEngines;
 
 use PDFService\Core\ITemplateEngine;
 use PDFService\Core\Template;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Description of RawTemplateEngine
@@ -25,7 +24,6 @@ class RawTemplateEngine implements ITemplateEngine
         $this->tempDir = $tempDir;
     }
 
-        //put your code here
     public function renderTemplate(Template $template, $data) {
         
         $templateFullPath = $this->ensureTemplateContents($template);        
@@ -40,15 +38,14 @@ class RawTemplateEngine implements ITemplateEngine
     
     private function ensureTemplateContents(Template $template) : string{
         $templateFullPath = implode(DIRECTORY_SEPARATOR, [ $this->tempDir, "{$template->getId()}.php" ]);
-        $fileSystem = new Filesystem();
-        
-        if($fileSystem->exists($templateFullPath)){
+
+        if(is_file($templateFullPath)){
             $info = new \SplFileInfo($templateFullPath);
             if($template->getLastModified() > $info->getMTime()){
-                $fileSystem->dumpFile($templateFullPath, $template->getContents());
+                file_put_contents($templateFullPath, $template->getContents());
             }
         }else{
-           $fileSystem->dumpFile($templateFullPath, $template->getContents()); 
+            file_put_contents($templateFullPath, $template->getContents());
         }
         
         return $templateFullPath;

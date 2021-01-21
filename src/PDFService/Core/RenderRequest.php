@@ -32,12 +32,14 @@ class RenderRequest
         return $this->data;
     }
 
-    public function setTemplateId($templateId) {
+    public function setTemplateId($templateId): RenderRequest
+    {
         $this->templateId = $templateId;
         return $this;
     }
 
-    public function setData($data) {
+    public function setData($data): RenderRequest
+    {
         $this->data = $data;
         return $this;
     }

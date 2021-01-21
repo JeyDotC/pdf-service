@@ -18,50 +18,40 @@ use PDFService\TemplateRepositories\FileSystemTemplatesRepository;
  *
  * @author jguevara
  */
-final class PDFRenderServiceDefaults implements IPDFRendererServiceBuilder
+final class PDFRenderServiceDefaults
 {
 
     /**
      *
      * @var ITemplatesRepository
      */
-    private static $templates;
+    public static $templatesRepository;
 
     /**
      *
      * @var ITemplateEngine
      */
-    private static $templateEngine;
+    public static $templateEngine;
 
     /**
      *
      * @var IPDFRenderer
      */
-    private static $pdfRenderer;
+    public static $pdfRenderer;
 
     /**
      *
      * @var IBinStorage
      */
-    private static $binStorage;
+    public static $binStorage;
 
-    public static function create() {
-        return new static();
+    public static function __constructStatic()
+    {
+        self::$templatesRepository = new FileSystemTemplatesRepository(sys_get_temp_dir());
+        self::$templateEngine = new RawTemplateEngine(sys_get_temp_dir());
+        self::$pdfRenderer = new SnappyPDFRenderer();
+        self::$binStorage = new NullBinStorage();
     }
-
-    public function __construct() {
-        self::$templates = self::$templates ?? new FileSystemTemplatesRepository(sys_get_temp_dir());
-        self::$templateEngine = self::$templateEngine ?? new RawTemplateEngine(sys_get_temp_dir());
-        self::$pdfRenderer = self::$pdfRenderer ?? new SnappyPDFRenderer();
-        self::$binStorage = self::$binStorage ?? new NullBinStorage();
-    }
-
-    //put your code here
-    public function build(PDFRenderService $service): PDFRenderService {
-        return $service->setTemplatesRepository(self::$templates)
-                        ->setTemplateEngine(self::$templateEngine)
-                        ->setPdfRenderer(self::$pdfRenderer)
-                        ->setBinStorage(self::$binStorage);
-    }
-
 }
+
+PDFRenderServiceDefaults::__constructStatic();

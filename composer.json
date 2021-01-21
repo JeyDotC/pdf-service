@@ -2,7 +2,7 @@
     "name": "jeydotc/pdf-service",
     "type": "library",
     "description": "Description of project pdf-service.",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "Jeysson Guevara",
@@ -10,18 +10,18 @@
         }
     ],
     "require": {
-        "symfony/finder": "dev-master",
-        "twig/twig": "2.x-dev",
-        "symfony/filesystem": "dev-master",
-        "h4cc/wkhtmltopdf-amd64": "0.12.4",
-        "knplabs/knp-snappy": "dev-master",
-        "wemersonjanuario/wkhtmltopdf-windows": "dev-master",
-        "profburial/wkhtmltopdf-binaries-osx": "dev-master"
+        "php": ">=7.2",
+        "knplabs/knp-snappy": "^1.2"
     },
     "autoload": {
         "psr-0": {
             "PDFService": "src/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PDFService\\Composer\\RuntimeInstall::installRuntime"
+        ]
     },
     "require-dev": {
         "phpunit/phpunit": "7.5.6"

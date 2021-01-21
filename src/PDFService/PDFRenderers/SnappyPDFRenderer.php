@@ -8,7 +8,6 @@
 
 namespace PDFService\PDFRenderers;
 
-use h4cc\WKHTMLToPDF\WKHTMLToPDF;
 use Knp\Snappy\Pdf;
 use PDFService\Core\IPDFRenderer;
 
@@ -19,25 +18,21 @@ use PDFService\Core\IPDFRenderer;
  */
 class SnappyPDFRenderer implements IPDFRenderer
 {
+    private $runtimePath = "";
 
-    //put your code here
-    public function renderPDF($renderedTemplate) {
-        $engine = $this->pickWebkitEngine();
-        $snappy = new Pdf($engine);
-        $data = $snappy->getOutputFromHtml($renderedTemplate);
-        return $data;
+    /**
+     * SnappyPDFRenderer constructor.
+     * @param string|null $runtimePath
+     */
+    public function __construct(string $runtimePath = null)
+    {
+        $this->runtimePath = $runtimePath ?? __DIR__ . '/../../../../../bin/wkhtmltopdf' . (PHP_OS_FAMILY === 'Windows' ? '.exe' : '');
     }
 
-    private function pickWebkitEngine(): string {
-        $binsPath = __DIR__ . '/../../../../../bin';
-        $os = strtoupper(PHP_OS);
-        if ($os === 'DARWIN') {
-            return "$binsPath/wkhtmltopdf-amd64-osx";
-        }
-        if ($os === 'WIN') {
-            return "$binsPath/wkhtmltopdf64.exe";
-        }
-        return "$binsPath/wkhtmltopdf-amd64";
+    public function renderPDF($renderedTemplate) {
+        $snappy = new Pdf($this->runtimePath);
+        $data = $snappy->getOutputFromHtml($renderedTemplate);
+        return $data;
     }
 
 }

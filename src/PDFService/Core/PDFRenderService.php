@@ -8,6 +8,8 @@
 
 namespace PDFService\Core;
 
+use PDFService\Core\Exceptions\ConfigurationException;
+
 /**
  * Description of PDFRenderService
  *
@@ -42,17 +44,26 @@ class PDFRenderService
     
     public static function create()
     {
-        $service = new static();
-        return $service->using(PDFRenderServiceDefaults::create());
+        return new static(
+            PDFRenderServiceDefaults::$templatesRepository,
+            PDFRenderServiceDefaults::$templateEngine,
+            PDFRenderServiceDefaults::$pdfRenderer,
+            PDFRenderServiceDefaults::$binStorage
+        );
     }
 
-    public function __construct(ITemplatesRepository $templates = null, ITemplateEngine $templateEngine = null, IPDFRenderer $pdfRenderer = null, IBinStorage $storage = null) {
-        $this->templates = $templates;
+    public function __construct(ITemplatesRepository $templatesRepository = null, ITemplateEngine $templateEngine = null, IPDFRenderer $pdfRenderer = null, IBinStorage $binStorage = null) {
+        $this->templates = $templatesRepository;
         $this->templateEngine = $templateEngine;
         $this->pdfRenderer = $pdfRenderer;
-        $this->binStorage = $storage;
+        $this->binStorage = $binStorage;
     }
 
+    /**
+     * @param RenderRequest $request
+     * @return mixed
+     * @throws ConfigurationException
+     */
     public function renderPDF(RenderRequest $request) {
         $this->checkSetup();
 
@@ -66,11 +77,10 @@ class PDFRenderService
 
         return $pdfHandle;
     }
-    
-    public function using(IPDFRendererServiceBuilder $builder){
-        return $builder->build($this);
-    }
 
+    /**
+     * @throws ConfigurationException
+     */
     private function checkSetup() {
         $this->checkFeature($this->templates, 'Templates repository');
         $this->checkFeature($this->templateEngine, 'Template engine');
@@ -84,22 +94,26 @@ class PDFRenderService
         }
     }
 
-    public function setTemplatesRepository(ITemplatesRepository $templates) {
+    public function setTemplatesRepository(ITemplatesRepository $templates): PDFRenderService
+    {
         $this->templates = $templates;
         return $this;
     }
 
-    public function setTemplateEngine(ITemplateEngine $templateEngine) {
+    public function setTemplateEngine(ITemplateEngine $templateEngine): PDFRenderService
+    {
         $this->templateEngine = $templateEngine;
         return $this;
     }
 
-    public function setPdfRenderer(IPDFRenderer $pdfRenderer) {
+    public function setPdfRenderer(IPDFRenderer $pdfRenderer): PDFRenderService
+    {
         $this->pdfRenderer = $pdfRenderer;
         return $this;
     }
 
-    public function setBinStorage(IBinStorage $binStorage) {
+    public function setBinStorage(IBinStorage $binStorage): PDFRenderService
+    {
         $this->binStorage = $binStorage;
         return $this;
     }
