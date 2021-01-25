@@ -45,11 +45,11 @@ class RuntimeInstall
             return self::$runtimeByOS['MacOS-x64'];
         }
 
-        $distro = shell_exec('lsb_release -si');
-        $version = shell_exec('lsb_release -sr');
+        $distro = trim(shell_exec('lsb_release -si'));
+        $version = trim(shell_exec('lsb_release -sr'));
         $versionMajor = (int)$version;
 
-        if ($distro !== 'Ubuntu' || !in_array((int)$versionMajor, [16, 18, 20])) {
+        if ($distro !== 'Ubuntu' || !in_array($versionMajor, [16, 18, 20])) {
             throw new \Exception("System [$distro-$version] Not Supported by this Script. However, you can always download your own wkhtmltopdf binary and put it under ./vendor/bin directory, or call composer install like this: `PDF_SERVICE_URL=<url-to-wkhtmltopdf-binary> composer install`");
         }
 
