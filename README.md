@@ -62,9 +62,42 @@ The magic comes with the fact that, you can just configure all of these aspects 
 composer require jeydotc/pdf-service
 ```
 
-### About the `wkhtmltopdf` binary required by `SnappyPDFRenderer`
+## Setup the `wkhtmltopdf` binary required by `SnappyPDFRenderer`
 
-Pdf service will try to download an appropriate runtime binary depending on the platform as a post-install step. If you face any problems, you can always download your own binary and provide the full path at the `SnappyPDFRenderer` constructor.
+The default `SnappyPDFRenderer` requires a `wkhtmltopdf` binary to work, there are several options to configure it:
+
+### Option 1: Download it yourself
+
+Just download an adequate binary for your system and copy it to your `./vendor/bin` folder. Or put it anywhere and give the absolute path to the constructor.
+
+### Option 2: Use the post-install-cmd
+
+In your `composer.json` file, add this snipped under the "scripts" section:
+
+```json
+{
+   // The rest of your composer file....
+   "scripts": { //<-- Add this if not already existing.
+      "post-install-cmd": [ //<-- Add this if not already existing. 
+         "PDFService\\Composer\\RuntimeInstall::installRuntime" //<-- Add this array entry.
+      ]
+   },
+}
+```
+
+Then run `composer install`. This will attempt to download the appropriate binary depending on your system. Currently, the only supported ones are:
+
+* MacOS-x64      
+* Ubuntu-16-AMD64
+* Ubuntu-18-AMD64
+* Ubuntu-20-AMD64
+* Windows-x64
+
+If your system is not in the above list, you can still run your composer install like this:
+
+`PDF_SERVICE_URL=<url-to-wkhtmltopdf-binary> composer install`
+
+Where `<url-to-wkhtmltopdf-binary>` can be either a URL to download the binary or an absolute path to a `wkhtmltopdf` file in your local machine.
 
 ## How to use
 

@@ -20,17 +20,32 @@ class SnappyPDFRenderer implements IPDFRenderer
 {
     private $runtimePath = "";
 
+    private $runUnderXVirtualFrameBuffer = false;
+
     /**
      * SnappyPDFRenderer constructor.
-     * @param string|null $runtimePath
+     * @param string|null $runtimePath The absolute path to the `wkhtmltopdf` binary. If not provided, it will attempt to use the one under the ./vendor/bin folder.
+     * @param bool $useXvfb For some systems (usually Linux Servers) we need to use XVFB in order to work.
      */
-    public function __construct(string $runtimePath = null)
+    public function __construct(string $runtimePath = null, $useXvfb = false)
     {
         $this->runtimePath = $runtimePath ?? __DIR__ . '/../../../../../bin/wkhtmltopdf' . (PHP_OS_FAMILY === 'Windows' ? '.exe' : '');
+        $this->runUnderXVirtualFrameBuffer = $useXvfb;
     }
 
+    /**
+     * @param $renderedTemplate
+     * @return mixed
+     * @throws \Exception
+     */
     public function renderPDF($renderedTemplate) {
-        $snappy = new Pdf($this->runtimePath);
+        if(!is_file($this->runtimePath)){
+            throw new \Exception("The runtimePath for the PDF renderer is not properly configured.");
+        }
+
+        $command = $this->runUnderXVirtualFrameBuffer ? "xvfb-run {$this->runtimePath}" : $this->runtimePath;
+
+        $snappy = new Pdf($command);
         $data = $snappy->getOutputFromHtml($renderedTemplate);
         return $data;
     }
