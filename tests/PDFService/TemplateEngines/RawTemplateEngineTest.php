@@ -27,7 +27,7 @@ class RawTemplateEngineTest extends TestCase
 
     public function rawTemplateProvider(){
         yield 'Simple Callable template' => [
-            '<? return function ($data) {?><h1><?=$data["name"]?></h1><?}?>',
+            '<?php return function ($data) {?><h1><?=$data["name"]?></h1><?php }?>',
             '<h1>John Doe</h1>',
         ];
 

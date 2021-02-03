@@ -18,23 +18,33 @@ class Template
 
     private $id;
     private $contents;
+    /**
+     * @var \DateTime
+     */
     private $lastModified;
 
-    public function __construct($id, $contents, $lastModified) {
+    public function __construct($id, $contents, \DateTime $lastModified)
+    {
         $this->id = $id;
         $this->contents = $contents;
         $this->lastModified = $lastModified;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getContents() {
+    public function getContents()
+    {
         return $this->contents;
     }
-    
-    public function getLastModified() {
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastModified(): \DateTime
+    {
         return $this->lastModified;
     }
 

@@ -41,7 +41,7 @@ class RawTemplateEngine implements ITemplateEngine
 
         if(is_file($templateFullPath)){
             $info = new \SplFileInfo($templateFullPath);
-            if($template->getLastModified() > $info->getMTime()){
+            if($template->getLastModified()->getTimestamp() > $info->getMTime()){
                 file_put_contents($templateFullPath, $template->getContents());
             }
         }else{
